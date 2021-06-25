@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{%block content %}
+<div class="jumbotron">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 border border border-info">
+                <div class="display-4">Add New Todo</div>
+                {{error}}
+                <form action="/" method="POST">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input type="submit" value="Add" class="btn btn-success">
+                    <br>
+                    <br>
+                </form>
+            </div>
+            <div class="col-lg-9">
+                <table class="table">
+                    <tr>
+                        <th>SN</th>
+                        <th>Title</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+
+                        {% for todo in todos %}
+                        <td>{{forloop.counter}}</td>
+                        <td>{{todo.title}}</td>
+                        <td>{{todo.priority}}</td>
+                        <td>
+                            {% if todo.status == 'P' %}
+                            🕑
+                            {% else %}
+                            ✔️
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/delete-todo/{{todo.id}}" title="Delete Todo"><img src="https://img.icons8.com/cute-clipart/64/000000/delete-sign.png" height="29" width="29"/></a>
+                            {% if todo.status == 'P' %}
+                            <a href="/change-status-todo/{{todo.id}}/C" title="Completed">✔️</a>
+                            {% else %}
+                            <a href="/change-status-todo/{{todo.id}}/P" title="Pending">🕑</a>
+                            {% endif %}
+                        </td>
+
+
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
